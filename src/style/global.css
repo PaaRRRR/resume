@@ -164,3 +164,22 @@ p {
     font-size: 1.5rem;
   }
 }
+
+.swiper-item {
+  /* position: absolute; */
+  width: 60px;
+}
+
+.swiper-item + .swiper-item {
+  margin-left: 120px;
+}
+
+@media screen and (max-width: 499px) {
+  .swiper-item {
+    width: 50px;
+  }
+
+  .swiper-item + .swiper-item {
+    margin-left: 60px;
+  }
+}
