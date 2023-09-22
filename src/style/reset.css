@@ -107,7 +107,10 @@ body {
   max-width: 1920px;
   margin: auto;
 }
-p,
+p {
+  line-height: 1.4;
+}
+
 li {
   line-height: 1.25;
 }
