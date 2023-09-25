@@ -10,12 +10,14 @@
 
 /* contrast animation */
 html {
-  --text-color-value: 0, 0, 0;
-  --background-color-value: 255, 255, 255;
+  --text-color-value: 255, 255, 255;
+  --background-color-value: 0, 0, 0;
   --text-color: rgb(var(--text-color-value));
   --copy-color: rgba(var(--text-color-value), 0.8);
   --nav-color: rgba(var(--text-color-value), 0.5);
   --background-color: rgb(var(--background-color-value));
+
+  scroll-behavior: smooth;
 }
 
 body {
@@ -97,7 +99,12 @@ p {
 }
 
 .line-seperator-gradient {
-  background-image: radial-gradient(closest-side, #d2d2d7, transparent);
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    #d2d2d7 50%,
+    transparent 100%
+  );
 }
 
 .hero-logo-gradient {

@@ -19,9 +19,13 @@
       <div class="px-2 py-1">
         <div class="flex justify-center items-center">
           <ul class="flex flex-row justify-center items-center space-x-2">
-            <li><a class="block p-2" href="#">경력</a></li>
-            <li><a class="block p-2" href="#">활동</a></li>
-            <li><a class="block p-2" href="#">스킬</a></li>
+            <li>
+              <a class="block p-2" href="#work_experience_navigator">경력</a>
+            </li>
+            <li>
+              <a class="block p-2" href="#other_experience_navigator">활동</a>
+            </li>
+            <li><a class="block p-2" href="#skill_navigator">스킬</a></li>
           </ul>
         </div>
       </div>
@@ -474,11 +478,11 @@
           <div class="w-full relative overflow-hidden">
             <!-- this is for line seperator -->
             <div
-              class="line-seperator-gradient absolute top-[-100%] left-0 bottom-[-100%] w-full"
+              class="line-seperator-gradient absolute top-0 left-0 w-full h-full"
             ></div>
             <div>
               <!-- work experience -->
-              <div>
+              <div id="work_experience_navigator">
                 <h2 class="panel pt-16 pb-8 relative">
                   Work Experience<span class="period-mark">.</span>
                 </h2>
@@ -581,7 +585,7 @@
               </div>
               <div class="line-seperator"></div>
               <!-- other experience -->
-              <div class="other-experience">
+              <div id="other_experience_navigator" class="other-experience">
                 <h2 class="pt-16 pb-8 panel relative">
                   Other Experience<span class="period-mark">.</span>
                 </h2>
@@ -615,11 +619,10 @@
                     <p>React Native를 활용해 앱개발 진행하고 있습니다.</p>
                   </div>
                 </div>
-                <div class="line-seperator"></div>
               </div>
               <div class="line-seperator"></div>
               <!-- skill -->
-              <div class="skill">
+              <div id="skill_navigator" class="skill">
                 <h2 class="panel pt-16 pb-8 relative">
                   Skills<span class="period-mark">.</span>
                 </h2>
