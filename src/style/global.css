@@ -168,18 +168,29 @@ p {
 .swiper-item {
   /* position: absolute; */
   width: 60px;
-}
-
-.swiper-item + .swiper-item {
-  margin-left: 120px;
+  margin: 0 60px;
 }
 
 @media screen and (max-width: 499px) {
   .swiper-item {
     width: 50px;
+    margin: 0 30px;
+  }
+}
+
+.swiper-transform {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  animation: swiper 30s linear infinite;
+}
+
+@keyframes swiper {
+  0% {
+    transform: translateX(0);
   }
 
-  .swiper-item + .swiper-item {
-    margin-left: 60px;
+  100% {
+    transform: translateX(-100%);
   }
 }
