@@ -9,14 +9,16 @@
 }
 
 /* contrast animation */
-body {
+html {
   --text-color-value: 0, 0, 0;
   --background-color-value: 255, 255, 255;
   --text-color: rgb(var(--text-color-value));
   --copy-color: rgba(var(--text-color-value), 0.8);
   --nav-color: rgba(var(--text-color-value), 0.5);
   --background-color: rgb(var(--background-color-value));
+}
 
+body {
   color: var(--text-color);
   background-color: var(--background-color);
 }
