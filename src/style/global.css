@@ -194,3 +194,20 @@ p {
     transform: translateX(-100%);
   }
 }
+
+.text-color-animation {
+  background: linear-gradient(0deg, #11181c 20%, rgba(17, 24, 28, 0) 45%),
+    linear-gradient(
+      90deg,
+      #0f3058 0%,
+      #006adc 33.333%,
+      #11181c 50%,
+      #11181c 100%
+    );
+  background-size: 300% 100%;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-position: 15% 0%;
+}
