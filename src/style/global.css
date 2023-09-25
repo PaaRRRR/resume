@@ -215,6 +215,19 @@ p {
   margin: 0 60px;
 }
 
+.swiper-item svg {
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-item path.text-color {
+  fill: var(--text-color);
+}
+
+.swiper-item path.bg-color {
+  fill: var(--background-color);
+}
+
 @media screen and (max-width: 499px) {
   .swiper-item {
     width: 50px;
