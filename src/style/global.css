@@ -12,6 +12,10 @@
 html {
   --text-color-value: 255, 255, 255;
   --background-color-value: 0, 0, 0;
+
+  /* --text-color-value: 0, 0, 0;
+  --background-color-value: 255, 255, 255; */
+
   --text-color: rgb(var(--text-color-value));
   --copy-color: rgba(var(--text-color-value), 0.8);
   --nav-color: rgba(var(--text-color-value), 0.5);
@@ -266,4 +270,94 @@ p {
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+body {
+  overflow: hidden;
+}
+
+.nav {
+  display: none;
+}
+
+.webgl {
+  position: sticky;
+  top: 0;
+  left: 0;
+  outline: none;
+}
+
+.svg-wrapper {
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.svg-wrapper svg {
+  width: 100%;
+  height: auto;
+
+  max-width: 500px;
+  overflow: unset;
+}
+
+.svg-wrapper g#outline {
+  animation: opacityOut;
+  animation-duration: 1s;
+  animation-delay: 2s;
+  animation-fill-mode: forwards;
+}
+
+.svg-wrapper g#colored {
+  animation: opacityIn;
+  animation-duration: 1s;
+  animation-delay: 2s;
+  animation-fill-mode: forwards;
+  opacity: 0;
+}
+
+.svg-wrapper g#outline path {
+  fill: none;
+  stroke: var(--text-color);
+}
+
+.svg-wrapper g#colored path {
+  stroke: none;
+}
+
+.svg-wrapper g#outline .letter_take {
+  opacity: 0;
+  animation: opacityIn;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+}
+
+.svg-wrapper g#outline .letter_over {
+  opacity: 0;
+  animation: opacityIn;
+  animation-duration: 1s;
+  animation-delay: 1s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes opacityIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes opacityOut {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
 }
