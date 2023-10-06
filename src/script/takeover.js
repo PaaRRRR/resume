@@ -147,7 +147,7 @@ function init() {
 
     // strokeText();
 
-    tick();
+    // tick();
   });
 
   // const canvas = document.createElement("canvas");
