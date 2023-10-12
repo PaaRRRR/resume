@@ -307,6 +307,11 @@ body {
   overflow: unset;
 }
 
+.svg-wrapper svg path {
+  stroke-dasharray: 0;
+  stroke-dashoffset: 0;
+}
+
 .svg-wrapper g#outline {
   animation: opacityOut;
   animation-duration: 1s;

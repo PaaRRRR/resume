@@ -122,6 +122,21 @@ function renderRect(percentage) {
   ctx.fillRect(rightBarXPos, barHeight, barWidth, sizes.height - barHeight);
 }
 
+// this needs to be changed to another path not #outline.
+const paths = [...document.querySelectorAll("#outline path")];
+
+function svgPathAnimation(percentage) {
+  for (let i = 0; i < paths.length; i += 1) {
+    let path = paths[i];
+
+    let value = 50 * percentage;
+    let reverseValue = 50 - value;
+    let strokeDasharray = `${reverseValue}% ${value}%`;
+
+    path.style.strokeDasharray = strokeDasharray;
+  }
+}
+
 function init() {
   resize();
 
@@ -142,8 +157,6 @@ function init() {
 
   myFont.load().then((font) => {
     document.fonts.add(font);
-
-    console.log("Font loaded");
 
     // strokeText();
 
@@ -193,8 +206,14 @@ function tick(fps) {
   // }
 
   // renderText
-  if (!fps || requestAnimationCurrent <= 20) {
-    renderText(requestAnimationCurrent);
+  // if (!fps || requestAnimationCurrent <= 20) {
+  //   renderText(requestAnimationCurrent);
+  //   window.requestAnimationFrame(tick);
+  // }
+
+  // svgAnimation
+  if (!fps || requestAnimationCurrent <= 6) {
+    svgPathAnimation(requestAnimationCurrent / 5);
     window.requestAnimationFrame(tick);
   }
 }
