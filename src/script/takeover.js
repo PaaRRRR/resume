@@ -39,13 +39,36 @@ function renderImg(img) {
   ctx.drawImage(img, 0, 0, sizes.width, sizes.height);
 }
 
+let canvasImgs = [];
+function loadCanvasImage(callback = () => {}) {
+  let imgElem;
+  let numLoading = 89;
+  const onload = () => --numLoading === 0 && callback();
+  for (let i = 0; i < numLoading; i += 1) {
+    imgElem = new Image();
+    imgElem.src = `../images/takeover/canvas/TakeOver_canvas_${100 + i}.webp`;
+    canvasImgs.push(imgElem);
+    imgElem.onload = onload;
+  }
+}
+
+function canvasImageAnimation(percentage) {
+  let calcedIndex = Math.floor(canvasImgs.length * percentage);
+  if (!calcedIndex || calcedIndex < 0) {
+    calcedIndex = 0;
+  } else if (calcedIndex >= canvasImgs.length) {
+    calcedIndex = canvasImgs.length - 1;
+  }
+
+  const currentImg = canvasImgs[calcedIndex];
+  renderImg(currentImg);
+}
+
 function renderText(percentage) {
   // ctx.clearRect(0, 0, sizes.width, sizes.height);
 
   const word = "TAKE OVER";
   const seconds = Math.ceil(percentage);
-
-  console.log("hello?", percentage);
 
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
@@ -140,11 +163,6 @@ function svgPathAnimation(percentage) {
 function init() {
   resize();
 
-  // load Image
-  // const img = new Image();
-  // img.src = "../images/takeover/total_frame.jpg";
-  // img.onload = () => renderImg(img);
-
   // black rect bar
   // renderRect();
 
@@ -162,6 +180,9 @@ function init() {
 
     // tick();
   });
+
+  // canvas animation
+  // loadCanvasImage(tick);
 
   // const canvas = document.createElement("canvas");
   // const offscreen = canvas.transferControlToOffscreen();
@@ -212,8 +233,14 @@ function tick(fps) {
   // }
 
   // svgAnimation
-  if (!fps || requestAnimationCurrent <= 6) {
-    svgPathAnimation(requestAnimationCurrent / 5);
+  // if (!fps || requestAnimationCurrent <= 6) {
+  //   svgPathAnimation(requestAnimationCurrent / 5);
+  //   window.requestAnimationFrame(tick);
+  // }
+
+  // canvasImageAnimation
+  if (!fps || requestAnimationCurrent <= 11) {
+    canvasImageAnimation(requestAnimationCurrent / 10);
     window.requestAnimationFrame(tick);
   }
 }
