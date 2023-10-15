@@ -160,6 +160,54 @@ function svgPathAnimation(percentage) {
   }
 }
 
+/*  diamond animation */
+class Shape {
+  constructor(x, y, w, h, fill) {
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+    this.fill = fill;
+  }
+}
+
+let diamond = [];
+
+function getReadyDiamond() {
+  const originalSize = sizes.width;
+  const scaledSize = originalSize * 1.4;
+  const targetBoxSize = Math.floor(scaledSize / 5);
+
+  let translatedValue = (scaledSize - originalSize) / 2;
+
+  for (let i = 0; i < 25; i += 1) {
+    let mok = Math.floor(i / 5);
+    let posX = targetBoxSize * (i % 5) - translatedValue;
+    let posY = targetBoxSize * mok - translatedValue;
+    diamond.push(
+      new Shape(posX, posY, targetBoxSize, targetBoxSize, "#ABE9F9")
+    );
+  }
+
+  ctx.translate(sizes.width / 2, -sizes.height / 2);
+  ctx.rotate(Math.PI / 4);
+
+  tick();
+}
+
+function renderDiamond(percentage) {
+  diamond.forEach((cur) => {
+    ctx.fillStyle = cur.fill;
+
+    const targetWidth = cur.w * percentage;
+    const difference = cur.w - targetWidth;
+    const targetX = cur.x + difference / 2;
+    const targetY = cur.y + difference / 2;
+
+    ctx.fillRect(targetX, targetY, targetWidth, targetWidth);
+  });
+}
+
 function init() {
   resize();
 
@@ -176,13 +224,14 @@ function init() {
   myFont.load().then((font) => {
     document.fonts.add(font);
 
-    // strokeText();
-
-    // tick();
+    tick();
   });
 
   // canvas animation
   // loadCanvasImage(tick);
+
+  // diamond animation
+  getReadyDiamond();
 
   // const canvas = document.createElement("canvas");
   // const offscreen = canvas.transferControlToOffscreen();
@@ -239,8 +288,14 @@ function tick(fps) {
   // }
 
   // canvasImageAnimation
+  // if (!fps || requestAnimationCurrent <= 11) {
+  //   canvasImageAnimation(requestAnimationCurrent / 10);
+  //   window.requestAnimationFrame(tick);
+  // }
+
+  // diamondAnimation
   if (!fps || requestAnimationCurrent <= 11) {
-    canvasImageAnimation(requestAnimationCurrent / 10);
+    renderDiamond(requestAnimationCurrent / 10);
     window.requestAnimationFrame(tick);
   }
 }
