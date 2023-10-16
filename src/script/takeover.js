@@ -73,12 +73,15 @@ function renderText(percentage) {
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
 
-  if (percentage <= 9) {
-    const currentText = word.slice(0, seconds);
+  if (percentage <= 0.5) {
+    let wordIndex = Math.ceil(word.length * (percentage / 0.5));
+    const currentText = word.slice(0, wordIndex);
     strokeText(currentText, "300px", "#FCEB57", true);
   } else {
-    if (seconds % 2 == 0) {
-      fillText(word, `${300 + 300 * (seconds / 20)}px`);
+    let calcedPercentage = Math.ceil(percentage * 20);
+
+    if (calcedPercentage % 2 == 0) {
+      fillText(word, `${300 + 300 * (calcedPercentage / 20)}px`);
     } else {
       ctx.clearRect(0, 0, sizes.width, sizes.height);
     }
@@ -132,7 +135,7 @@ function strokeText(
 }
 
 function renderRect(percentage) {
-  let barWidth = Math.floor((sizes.width * percentage) / 100);
+  let barWidth = Math.floor(sizes.width * percentage);
 
   let rightBarXPos = sizes.width - barWidth;
 
@@ -231,7 +234,7 @@ function init() {
   // loadCanvasImage(tick);
 
   // diamond animation
-  getReadyDiamond();
+  // getReadyDiamond();
 
   // const canvas = document.createElement("canvas");
   // const offscreen = canvas.transferControlToOffscreen();
@@ -270,16 +273,16 @@ function tick(fps) {
   // controll timer
 
   // renderRect
-  // if (!fps || requestAnimationCurrent * 10 <= 110) {
-  //   renderRect(requestAnimationCurrent * 10);
+  // if (!fps || requestAnimationCurrent <= 11) {
+  //   renderRect(requestAnimationCurrent / 10);
   //   window.requestAnimationFrame(tick);
   // }
 
   // renderText
-  // if (!fps || requestAnimationCurrent <= 20) {
-  //   renderText(requestAnimationCurrent);
-  //   window.requestAnimationFrame(tick);
-  // }
+  if (!fps || requestAnimationCurrent <= 20) {
+    renderText(requestAnimationCurrent / 20);
+    window.requestAnimationFrame(tick);
+  }
 
   // svgAnimation
   // if (!fps || requestAnimationCurrent <= 6) {
@@ -294,10 +297,10 @@ function tick(fps) {
   // }
 
   // diamondAnimation
-  if (!fps || requestAnimationCurrent <= 11) {
-    renderDiamond(requestAnimationCurrent / 10);
-    window.requestAnimationFrame(tick);
-  }
+  // if (!fps || requestAnimationCurrent <= 11) {
+  //   renderDiamond(requestAnimationCurrent / 10);
+  //   window.requestAnimationFrame(tick);
+  // }
 }
 
 document.addEventListener("DOMContentLoaded", init);
