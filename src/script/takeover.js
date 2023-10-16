@@ -68,7 +68,6 @@ function renderText(percentage) {
   // ctx.clearRect(0, 0, sizes.width, sizes.height);
 
   const word = "TAKE OVER";
-  const seconds = Math.ceil(percentage);
 
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
@@ -81,9 +80,9 @@ function renderText(percentage) {
     let calcedPercentage = Math.ceil(percentage * 20);
 
     if (calcedPercentage % 2 == 0) {
-      fillText(word, `${300 + 300 * (calcedPercentage / 20)}px`);
-    } else {
       ctx.clearRect(0, 0, sizes.width, sizes.height);
+    } else {
+      fillText(word, `${300 + 300 * (calcedPercentage / 100)}px`);
     }
   }
 }
@@ -191,11 +190,6 @@ function getReadyDiamond() {
       new Shape(posX, posY, targetBoxSize, targetBoxSize, "#ABE9F9")
     );
   }
-
-  ctx.translate(sizes.width / 2, -sizes.height / 2);
-  ctx.rotate(Math.PI / 4);
-
-  tick();
 }
 
 function renderDiamond(percentage) {
@@ -224,14 +218,13 @@ function init() {
     "url('../fonts/DharmaGothicC-HeavyItalic.ttf')"
   );
 
+  // get ready
   myFont.load().then((font) => {
     document.fonts.add(font);
 
-    tick();
+    getReadyDiamond();
+    loadCanvasImage(totalAnimation);
   });
-
-  // canvas animation
-  // loadCanvasImage(tick);
 
   // diamond animation
   // getReadyDiamond();
@@ -263,6 +256,61 @@ function highResolution() {
 
 let requestAnimationTimer = null;
 let requestAnimationCurrent;
+
+let process = ["bar", "text", "diamond", "canvas"];
+let processStatus = "bar";
+
+function totalAnimation(fps) {
+  if (requestAnimationTimer == null) {
+    requestAnimationTimer = fps;
+  }
+
+  requestAnimationCurrent = (fps - requestAnimationTimer) / 1000;
+
+  // controll timer
+
+  // renderRect
+  if (!fps || requestAnimationCurrent <= 11) {
+    if (processStatus != "bar") {
+      processStatus = "bar";
+    }
+    renderRect(requestAnimationCurrent / 10);
+    window.requestAnimationFrame(totalAnimation);
+  } else if (requestAnimationCurrent <= 21 + 11) {
+    if (processStatus != "text") {
+      processStatus = "text";
+
+      canvas.style.background = "black";
+    }
+    renderText((requestAnimationCurrent - 11) / 20);
+    window.requestAnimationFrame(totalAnimation);
+  } else if (requestAnimationCurrent <= 11 + 21 + 11) {
+    if (processStatus != "diamond") {
+      processStatus = "diamond";
+
+      ctx.translate(sizes.width / 2, -sizes.height / 2);
+      ctx.rotate(Math.PI / 4);
+    }
+    renderDiamond((requestAnimationCurrent - 21 - 11) / 10);
+    window.requestAnimationFrame(totalAnimation);
+  } else if (requestAnimationCurrent <= 11 + 11 + 21 + 11) {
+    if (processStatus != "canvas") {
+      processStatus = "canvas";
+
+      ctx.rotate(-Math.PI / 4);
+      ctx.translate(-sizes.width / 2, sizes.height / 2);
+    }
+    canvasImageAnimation((requestAnimationCurrent - 11 - 21 - 11) / 10);
+    window.requestAnimationFrame(totalAnimation);
+  }
+
+  // svgAnimation
+  // if (!fps || requestAnimationCurrent <= 6) {
+  //   svgPathAnimation(requestAnimationCurrent / 5);
+  //   window.requestAnimationFrame(tick);
+  // }
+}
+
 function tick(fps) {
   if (requestAnimationTimer == null) {
     requestAnimationTimer = fps;
