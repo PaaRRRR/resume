@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setTimeout(() => {
     document.body.style.overflow = "unset";
     document.querySelector("nav").style.display = "block";
-    // init();
+    init();
   }, 3000);
 });
 
@@ -81,9 +81,9 @@ function renderText(percentage) {
     let calcedPercentage = Math.ceil(percentage * 20);
 
     if (calcedPercentage % 2 == 0) {
-      ctx.clearRect(0, 0, sizes.width, sizes.height);
-    } else {
       fillText(word, `${300 + 300 * (calcedPercentage / 100)}px`);
+    } else {
+      ctx.clearRect(0, 0, sizes.width, sizes.height);
     }
   }
 }
@@ -259,13 +259,12 @@ function init() {
     document.fonts.add(font);
 
     getReadyDiamond();
-    // loadCanvasImage(totalAnimation);
 
     xLetter.img = new Image();
     xLetter.img.src = `../images/takeover/letter_X_colored.svg`;
     xLetter.img.onload = () => {
-      // xLetterAnimation(xLetter.img, 0.5);
-      tick();
+      loadCanvasImage(totalAnimation);
+      // tick();
     };
 
     // tick();
@@ -313,42 +312,72 @@ function totalAnimation(fps) {
   if (!fps || requestAnimationCurrent <= 11) {
     if (processStatus != "bar") {
       processStatus = "bar";
+      console.log("bar animation start");
     }
+
     renderRect(requestAnimationCurrent / 10);
     window.requestAnimationFrame(totalAnimation);
-  } else if (requestAnimationCurrent <= 21 + 11) {
+  } else if (requestAnimationCurrent <= 11 + 11) {
     if (processStatus != "text") {
       processStatus = "text";
 
       canvas.style.background = "black";
+      console.log("text animation start");
     }
-    renderText((requestAnimationCurrent - 11) / 20);
+
+    renderText((requestAnimationCurrent - 11) / 10);
     window.requestAnimationFrame(totalAnimation);
-  } else if (requestAnimationCurrent <= 11 + 21 + 11) {
+  } else if (requestAnimationCurrent <= 11 + 11 + 11) {
     if (processStatus != "diamond") {
       processStatus = "diamond";
 
       ctx.translate(sizes.width / 2, -sizes.height / 2);
       ctx.rotate(Math.PI / 4);
+      console.log("diamond animation start");
     }
-    renderDiamond((requestAnimationCurrent - 21 - 11) / 10);
+
+    renderDiamond((requestAnimationCurrent - 11 - 11) / 10);
     window.requestAnimationFrame(totalAnimation);
-  } else if (requestAnimationCurrent <= 11 + 11 + 21 + 11) {
-    if (processStatus != "canvas") {
-      processStatus = "canvas";
+  } else if (requestAnimationCurrent <= 11 + 11 + 11 + 11) {
+    if (processStatus != "xLetter") {
+      processStatus = "xLetter";
 
       ctx.rotate(-Math.PI / 4);
       ctx.translate(-sizes.width / 2, sizes.height / 2);
+
+      canvas.style.background = "unset";
+      const outlineSVG = document.querySelector("g#outline");
+      const coloredSVG = document.querySelector("g#colored");
+      coloredSVG.style.display = "none";
+      outlineSVG.style.setProperty("opacity", "1", "important");
+      console.log("xLetter animation start");
     }
-    canvasImageAnimation((requestAnimationCurrent - 11 - 21 - 11) / 10);
+
+    xLetterAnimation(
+      xLetter.img,
+      (requestAnimationCurrent - 11 - 11 - 11) / 10
+    );
+    window.requestAnimationFrame(totalAnimation);
+  } else if (requestAnimationCurrent <= 11 + 11 + 11 + 11 + 5) {
+    if (processStatus != "svgPath") {
+      processStatus = "svgPath";
+      console.log("svgPath animation start");
+    }
+
+    svgPathAnimation((requestAnimationCurrent - 11 - 11 - 11 - 11) / 5);
+    window.requestAnimationFrame(totalAnimation);
+  } else if (requestAnimationCurrent <= 11 + 11 + 11 + 11 + 5 + 11) {
+    if (processStatus != "canvas") {
+      processStatus = "canvas";
+
+      console.log("canvas animation start");
+    }
+
+    canvasImageAnimation(
+      (requestAnimationCurrent - 11 - 11 - 11 - 11 - 5) / 10
+    );
     window.requestAnimationFrame(totalAnimation);
   }
-
-  // svgAnimation
-  // if (!fps || requestAnimationCurrent <= 6) {
-  //   svgPathAnimation(requestAnimationCurrent / 5);
-  //   window.requestAnimationFrame(tick);
-  // }
 }
 
 function tick(fps) {
@@ -397,4 +426,4 @@ function tick(fps) {
   }
 }
 
-document.addEventListener("DOMContentLoaded", init);
+// document.addEventListener("DOMContentLoaded", init);
