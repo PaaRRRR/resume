@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setTimeout(() => {
     document.body.style.overflow = "unset";
     document.querySelector("nav").style.display = "block";
+    // init();
   }, 3000);
 });
 
@@ -205,6 +206,41 @@ function renderDiamond(percentage) {
   });
 }
 
+const xLetter = {
+  width: 538,
+  height: 347,
+  ratio: 0.645,
+  img: "",
+};
+
+function xLetterAnimation(img, percentage) {
+  ctx.clearRect(0, 0, sizes.width, sizes.height);
+  let imgWidth = sizes.width * percentage * 8;
+  let imgHeight = imgWidth * xLetter.ratio;
+
+  imgWidth = Math.floor(imgWidth);
+  imgHeight = Math.floor(imgHeight);
+
+  const startXPoint = Math.floor(sizes.width / 2 - imgWidth / 2);
+  const startYPoint = Math.floor(sizes.height / 2 - imgHeight / 2);
+
+  // ctx.beginPath();
+  ctx.fillStyle = "#ABE9F9";
+  ctx.rect(0, 0, sizes.width, startYPoint);
+  ctx.rect(0, startYPoint - 1, startXPoint + 1, imgHeight + 1);
+  ctx.rect(
+    sizes.width - startXPoint - 1,
+    startYPoint - 1,
+    startXPoint + 1,
+    imgHeight + 1
+  );
+  ctx.rect(0, sizes.height - startYPoint, sizes.width, sizes.height);
+  ctx.fill();
+  ctx.clearRect(startXPoint + 8, startYPoint + 8, imgWidth - 8, imgHeight - 8);
+
+  ctx.drawImage(img, startXPoint, startYPoint, imgWidth, imgHeight);
+}
+
 function init() {
   resize();
 
@@ -223,18 +259,22 @@ function init() {
     document.fonts.add(font);
 
     getReadyDiamond();
-    loadCanvasImage(totalAnimation);
-  });
+    // loadCanvasImage(totalAnimation);
 
-  // diamond animation
-  // getReadyDiamond();
+    xLetter.img = new Image();
+    xLetter.img.src = `../images/takeover/letter_X_colored.svg`;
+    xLetter.img.onload = () => {
+      // xLetterAnimation(xLetter.img, 0.5);
+      tick();
+    };
+
+    // tick();
+  });
 
   // const canvas = document.createElement("canvas");
   // const offscreen = canvas.transferControlToOffscreen();
   // const worker = new Worker("/script/worker.js");
   // worker.postMessage({ canvas: offscreen }, [offscreen]);
-
-  // tick();
 }
 
 function highResolution() {
@@ -327,10 +367,10 @@ function tick(fps) {
   // }
 
   // renderText
-  if (!fps || requestAnimationCurrent <= 20) {
-    renderText(requestAnimationCurrent / 20);
-    window.requestAnimationFrame(tick);
-  }
+  // if (!fps || requestAnimationCurrent <= 20) {
+  //   renderText(requestAnimationCurrent / 20);
+  //   window.requestAnimationFrame(tick);
+  // }
 
   // svgAnimation
   // if (!fps || requestAnimationCurrent <= 6) {
@@ -349,6 +389,12 @@ function tick(fps) {
   //   renderDiamond(requestAnimationCurrent / 10);
   //   window.requestAnimationFrame(tick);
   // }
+
+  // xLetter animation
+  if (!fps || requestAnimationCurrent <= 11) {
+    xLetterAnimation(xLetter.img, requestAnimationCurrent / 10);
+    window.requestAnimationFrame(tick);
+  }
 }
 
 document.addEventListener("DOMContentLoaded", init);
