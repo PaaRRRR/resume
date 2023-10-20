@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setTimeout(() => {
     document.body.style.overflow = "unset";
     document.querySelector("nav").style.display = "block";
-    init();
+    // init();
   }, 3000);
 });
 
@@ -81,7 +81,7 @@ function renderText(percentage) {
     let calcedPercentage = Math.ceil(percentage * 20);
 
     if (calcedPercentage % 2 == 0) {
-      fillText(word, `${300 + 300 * (calcedPercentage / 100)}px`);
+      fillText(word, `${300 + 300 * (calcedPercentage / 20)}px`);
     } else {
       ctx.clearRect(0, 0, sizes.width, sizes.height);
     }
@@ -177,15 +177,16 @@ class Shape {
 let diamond = [];
 
 function getReadyDiamond() {
+  let row_num = 8;
   const originalSize = sizes.width;
   const scaledSize = originalSize * 1.4;
-  const targetBoxSize = Math.floor(scaledSize / 5);
+  const targetBoxSize = Math.floor(scaledSize / row_num);
 
   let translatedValue = (scaledSize - originalSize) / 2;
 
-  for (let i = 0; i < 25; i += 1) {
-    let mok = Math.floor(i / 5);
-    let posX = targetBoxSize * (i % 5) - translatedValue;
+  for (let i = 0; i < row_num * row_num; i += 1) {
+    let mok = Math.floor(i / row_num);
+    let posX = targetBoxSize * (i % row_num) - translatedValue;
     let posY = targetBoxSize * mok - translatedValue;
     diamond.push(
       new Shape(posX, posY, targetBoxSize, targetBoxSize, "#ABE9F9")
