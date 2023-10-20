@@ -313,21 +313,6 @@ body {
   stroke-dashoffset: 0;
 }
 
-.svg-wrapper g#outline {
-  animation: opacityOut;
-  animation-duration: 1s;
-  animation-delay: 2s;
-  animation-fill-mode: forwards;
-}
-
-.svg-wrapper g#colored {
-  animation: opacityIn;
-  animation-duration: 1s;
-  animation-delay: 2s;
-  animation-fill-mode: forwards;
-  opacity: 0;
-}
-
 .svg-wrapper g#outline path {
   fill: none;
   stroke: var(--text-color);
@@ -339,13 +324,37 @@ body {
 
 .svg-wrapper g#outline .letter_take {
   opacity: 0;
+}
+
+.svg-wrapper g#outline .letter_over {
+  opacity: 0;
+}
+
+.svg-wrapper g#colored {
+  opacity: 0;
+}
+
+.svg-wrapper.intro g#outline {
+  animation: opacityOut;
+  animation-duration: 1s;
+  animation-delay: 2s;
+  animation-fill-mode: forwards;
+}
+
+.svg-wrapper.intro g#colored {
+  animation: opacityIn;
+  animation-duration: 1s;
+  animation-delay: 2s;
+  animation-fill-mode: forwards;
+}
+
+.svg-wrapper.intro g#outline .letter_take {
   animation: opacityIn;
   animation-duration: 1s;
   animation-fill-mode: forwards;
 }
 
-.svg-wrapper g#outline .letter_over {
-  opacity: 0;
+.svg-wrapper.intro g#outline .letter_over {
   animation: opacityIn;
   animation-duration: 1s;
   animation-delay: 1s;

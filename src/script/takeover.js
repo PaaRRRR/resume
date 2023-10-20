@@ -1,10 +1,10 @@
-document.addEventListener("DOMContentLoaded", () => {
-  setTimeout(() => {
-    document.body.style.overflow = "unset";
-    document.querySelector("nav").style.display = "block";
-    // init();
-  }, 3000);
-});
+// document.addEventListener("DOMContentLoaded", () => {
+//   setTimeout(() => {
+//     document.body.style.overflow = "unset";
+//     document.querySelector("nav").style.display = "block";
+//     // init();
+//   }, 3000);
+// });
 
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");

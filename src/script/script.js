@@ -15,9 +15,6 @@ class BannerHighlight extends HTMLElement {
       height: window.innerHeight,
     };
 
-    this.requestAnimationTimer = null;
-    this.requestAnimationCurrent;
-
     this.getVariables();
 
     this.getStartingPoint();
@@ -27,13 +24,6 @@ class BannerHighlight extends HTMLElement {
     window.addEventListener("resize", this.resizeHandler.bind(this));
 
     this.resizeHandler();
-
-    document.addEventListener("DOMContentLoaded", () => {
-      setTimeout(() => {
-        document.body.style.overflow = "unset";
-        document.querySelector("nav").style.display = "block";
-      }, 3000);
-    });
   }
 
   resizeHandler() {
@@ -60,6 +50,17 @@ class BannerHighlight extends HTMLElement {
     this.canvas.style.height = `${rect.height}px`;
   }
 
+  loadHandler() {
+    const svgWrapper = document.querySelector(".svg-wrapper");
+    svgWrapper.classList.add("intro");
+
+    setTimeout(() => {
+      document.body.style.overflow = "unset";
+      document.querySelector("nav").style.display = "block";
+      this.totalAnimation();
+    }, 3000);
+  }
+
   getVariables() {
     this.canvasImages = [];
     this.xLetter = {
@@ -72,10 +73,15 @@ class BannerHighlight extends HTMLElement {
     this.paths = [...document.querySelectorAll("#outline path")];
     this.animation_status = "bar";
 
+    this.requestAnimationTimer = null;
+    this.requestAnimationCurrent;
+
     this.loadDiamond();
-    this.loadCanvasImage();
-    this.loadFont();
-    this.loadXLetter();
+    let loadCount = 3;
+    const onload = () => --loadCount === 0 && this.loadHandler();
+    this.loadCanvasImage(onload);
+    this.loadFont(onload);
+    this.loadXLetter(onload);
   }
 
   loadCanvasImage(callback = () => {}) {
@@ -114,7 +120,10 @@ class BannerHighlight extends HTMLElement {
       "url('../fonts/DharmaGothicC-HeavyItalic.ttf')"
     );
 
-    myFont.onload = callback;
+    myFont.load().then((font) => {
+      document.fonts.add(font);
+      callback();
+    });
   }
 
   loadXLetter(callback = () => {}) {
@@ -290,6 +299,89 @@ class BannerHighlight extends HTMLElement {
     );
 
     this.ctx.drawImage(img, startXPoint, startYPoint, imgWidth, imgHeight);
+  }
+
+  totalAnimation(fps) {
+    if (this.requestAnimationTimer == null) {
+      this.requestAnimationTimer = fps;
+    }
+
+    this.requestAnimationCurrent = (fps - this.requestAnimationTimer) / 1000;
+
+    // controll timer
+
+    // renderRect
+    if (!fps || this.requestAnimationCurrent <= 11) {
+      if (this.animation_status != "bar") {
+        this.animation_status = "bar";
+        console.log("bar animation start");
+      }
+
+      this.renderRect(this.requestAnimationCurrent / 10);
+      window.requestAnimationFrame(this.totalAnimation.bind(this));
+    } else if (this.requestAnimationCurrent <= 11 + 11) {
+      if (this.animation_status != "text") {
+        this.animation_status = "text";
+
+        this.canvas.style.background = "black";
+        console.log("text animation start");
+      }
+
+      this.renderText((this.requestAnimationCurrent - 11) / 10);
+      window.requestAnimationFrame(this.totalAnimation.bind(this));
+    } else if (this.requestAnimationCurrent <= 11 + 11 + 11) {
+      if (this.animation_status != "diamond") {
+        this.animation_status = "diamond";
+
+        this.ctx.translate(this.sizes.width / 2, -this.sizes.height / 2);
+        this.ctx.rotate(Math.PI / 4);
+        console.log("diamond animation start");
+      }
+
+      this.renderDiamond((this.requestAnimationCurrent - 11 - 11) / 10);
+      window.requestAnimationFrame(this.totalAnimation.bind(this));
+    } else if (this.requestAnimationCurrent <= 11 + 11 + 11 + 11) {
+      if (this.animation_status != "xLetter") {
+        this.animation_status = "xLetter";
+
+        this.ctx.rotate(-Math.PI / 4);
+        this.ctx.translate(-this.sizes.width / 2, this.sizes.height / 2);
+
+        this.canvas.style.background = "unset";
+        const outlineSVG = document.querySelector("g#outline");
+        const coloredSVG = document.querySelector("g#colored");
+        coloredSVG.style.display = "none";
+        outlineSVG.style.setProperty("opacity", "1", "important");
+        console.log("xLetter animation start");
+      }
+
+      this.xLetterAnimation(
+        this.xLetter.img,
+        (this.requestAnimationCurrent - 11 - 11 - 11) / 10
+      );
+      window.requestAnimationFrame(this.totalAnimation.bind(this));
+    } else if (this.requestAnimationCurrent <= 11 + 11 + 11 + 11 + 5) {
+      if (this.animation_status != "svgPath") {
+        this.animation_status = "svgPath";
+        console.log("svgPath animation start");
+      }
+
+      this.svgPathAnimation(
+        (this.requestAnimationCurrent - 11 - 11 - 11 - 11) / 5
+      );
+      window.requestAnimationFrame(this.totalAnimation.bind(this));
+    } else if (this.requestAnimationCurrent <= 11 + 11 + 11 + 11 + 5 + 11) {
+      if (this.animation_status != "canvas") {
+        this.animation_status = "canvas";
+
+        console.log("canvas animation start");
+      }
+
+      this.canvasImageAnimation(
+        (this.requestAnimationCurrent - 11 - 11 - 11 - 11 - 5) / 10
+      );
+      window.requestAnimationFrame(this.totalAnimation.bind(this));
+    }
   }
 
   /* end of animation part */
