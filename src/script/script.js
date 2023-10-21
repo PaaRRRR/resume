@@ -19,6 +19,7 @@ class BannerHighlight extends HTMLElement {
 
     this.getStartingPoint();
     this.setAnimationValue();
+    this.loadAsset();
 
     window.addEventListener("scroll", this.scrollHandler.bind(this));
     window.addEventListener("resize", this.resizeHandler.bind(this));
@@ -50,17 +51,6 @@ class BannerHighlight extends HTMLElement {
     this.canvas.style.height = `${rect.height}px`;
   }
 
-  loadHandler() {
-    const svgWrapper = document.querySelector(".svg-wrapper");
-    svgWrapper.classList.add("intro");
-
-    setTimeout(() => {
-      document.body.style.overflow = "unset";
-      document.querySelector("nav").style.display = "block";
-      // this.totalAnimation();
-    }, 3000);
-  }
-
   getVariables() {
     this.canvasImages = [];
     this.xLetter = {
@@ -78,13 +68,26 @@ class BannerHighlight extends HTMLElement {
 
     this.requestAnimationTimer = null;
     this.requestAnimationCurrent;
+  }
 
+  loadAsset() {
     this.loadDiamond();
     let loadCount = 3;
     const onload = () => --loadCount === 0 && this.loadHandler();
     this.loadCanvasImage(onload);
     this.loadFont(onload);
     this.loadXLetter(onload);
+  }
+
+  loadHandler() {
+    const svgWrapper = document.querySelector(".svg-wrapper");
+    svgWrapper.classList.add("intro");
+
+    setTimeout(() => {
+      document.body.style.overflow = "unset";
+      document.querySelector("nav").style.display = "block";
+      // this.totalAnimation();
+    }, 3000);
   }
 
   loadCanvasImage(callback = () => {}) {
