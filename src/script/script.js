@@ -57,7 +57,7 @@ class BannerHighlight extends HTMLElement {
     setTimeout(() => {
       document.body.style.overflow = "unset";
       document.querySelector("nav").style.display = "block";
-      this.totalAnimation();
+      // this.totalAnimation();
     }, 3000);
   }
 
@@ -72,6 +72,9 @@ class BannerHighlight extends HTMLElement {
     this.diamond = [];
     this.paths = [...document.querySelectorAll("#outline path")];
     this.animation_status = "bar";
+
+    this.outlineSVG = document.querySelector("g#outline");
+    this.coloredSVG = document.querySelector("g#colored");
 
     this.requestAnimationTimer = null;
     this.requestAnimationCurrent;
@@ -395,13 +398,14 @@ class BannerHighlight extends HTMLElement {
   }
 
   setAnimationValue() {
-    this.animateValue = {
-      opacityOut: [1, 0, { start: 0.1, end: 0.33 }],
-      contrastIn: [255, 0, { start: 0.36, end: 0.43 }],
-    };
-
-    let opacityOut = [1, 0, { start: 0.1, end: 0.33 }];
-    let contrastIn = [255, 0, { start: 0.36, end: 0.43 }];
+    let rectAnimation = [0, 1, { start: 0, end: 0 }],
+      textAnimation = [0, 1, { start: 0, end: 0 }],
+      diamondAnimation = [0, 1, { start: 0, end: 0 }],
+      xLetterAnimation = [0, 1, { start: 0, end: 0 }],
+      svgPathAnimation = [0, 1, { start: 0, end: 0 }],
+      canvasImageAnimation = [0, 1, { start: 0, end: 0 }],
+      opacityOut = [1, 0, { start: 0, end: 0 }],
+      contrastIn = [255, 0, { start: 0, end: 0 }];
 
     let { top, height } = this.contrastElement.getBoundingClientRect();
     let contrastElementStartingYOffset = top + scrollY;
@@ -412,20 +416,46 @@ class BannerHighlight extends HTMLElement {
     // 페이지 절반왔을 때 endsAt
 
     let oneStepAmount = 100;
-    let halfSceneAmount = this.screenHeight / 2;
-    halfSceneAmount = halfSceneAmount < 500 ? 500 : halfSceneAmount;
+    let halfHeight = this.screenHeight / 2;
+    halfHeight = Math.max(500, halfHeight);
     let contrastStartAt =
       contrastElementStartingYOffset - this.startingYOffset - this.screenHeight; // normalize
 
-    let contrastEndAt = contrastStartAt + halfSceneAmount;
+    let contrastEndAt = contrastStartAt + halfHeight;
     let opacityOutEndAt = contrastStartAt + 4.5 * oneStepAmount;
 
     contrastIn[2].start = (contrastStartAt + 1.5 * oneStepAmount) / this.height;
     contrastIn[2].end = contrastEndAt / this.height;
     opacityOut[2].end = opacityOutEndAt / this.height;
 
+    const stickyElementLong = contrastIn[2].start;
+    // 10, 10, 10, 10, 5, 10
+    const stickyElementStep = stickyElementLong / 55;
+    rectAnimation[2].start = 0;
+    rectAnimation[2].end = rectAnimation[2].start + 10 * stickyElementStep;
+    textAnimation[2].start = rectAnimation[2].end;
+    textAnimation[2].end = textAnimation[2].start + 10 * stickyElementStep;
+    diamondAnimation[2].start = textAnimation[2].end;
+    diamondAnimation[2].end =
+      diamondAnimation[2].start + 10 * stickyElementStep;
+    xLetterAnimation[2].start = diamondAnimation[2].end;
+    xLetterAnimation[2].end =
+      xLetterAnimation[2].start + 10 * stickyElementStep;
+    svgPathAnimation[2].start = xLetterAnimation[2].end;
+    svgPathAnimation[2].end = svgPathAnimation[2].start + 5 * stickyElementStep;
+    canvasImageAnimation[2].start = svgPathAnimation[2].end;
+    canvasImageAnimation[2].end =
+      canvasImageAnimation[2].start + 10 * stickyElementStep;
+    opacityOut[2].start = canvasImageAnimation[2].end;
+
     this.animateValue = {
-      ...this.animateValue,
+      rectAnimation,
+      textAnimation,
+      diamondAnimation,
+      xLetterAnimation,
+      svgPathAnimation,
+      canvasImageAnimation,
+
       opacityOut,
       contrastIn,
     };
@@ -461,11 +491,124 @@ class BannerHighlight extends HTMLElement {
 
       let scrollRatio = this.currentScrollY / this.height;
 
-      let { opacityOut, contrastIn } = this.animateValue;
+      let {
+        rectAnimation,
+        textAnimation,
+        diamondAnimation,
+        xLetterAnimation,
+        svgPathAnimation,
+        canvasImageAnimation,
+        opacityOut,
+        contrastIn,
+      } = this.animateValue;
 
-      // opacityIn, opacityOut, contrastIn
+      // sticky element animation
+      if (
+        scrollRatio >= rectAnimation[2].start &&
+        scrollRatio < rectAnimation[2].end
+      ) {
+        if (this.animation_status != "rect") {
+          this.animation_status = "rect";
+        }
 
-      // this is for background video
+        const value = this.calcAnimatedValue(
+          rectAnimation,
+          this.currentScrollY,
+          this.height
+        );
+
+        this.renderRect(value);
+      } else if (
+        scrollRatio >= textAnimation[2].start &&
+        scrollRatio < textAnimation[2].end
+      ) {
+        if (this.animation_status != "text") {
+          this.animation_status = "text";
+
+          this.canvas.style.background = "black";
+        }
+
+        const value = this.calcAnimatedValue(
+          textAnimation,
+          this.currentScrollY,
+          this.height
+        );
+
+        this.renderText(value);
+      } else if (
+        scrollRatio >= diamondAnimation[2].start &&
+        scrollRatio < diamondAnimation[2].end
+      ) {
+        if (this.animation_status != "diamond") {
+          this.animation_status = "diamond";
+
+          this.ctx.translate(this.sizes.width / 2, -this.sizes.height / 2);
+          this.ctx.rotate(Math.PI / 4);
+        }
+
+        const value = this.calcAnimatedValue(
+          diamondAnimation,
+          this.currentScrollY,
+          this.height
+        );
+
+        this.renderDiamond(value);
+      } else if (
+        scrollRatio >= xLetterAnimation[2].start &&
+        scrollRatio < xLetterAnimation[2].end
+      ) {
+        if (this.animation_status != "xLetter") {
+          this.animation_status = "xLetter";
+
+          this.canvas.style.background = "";
+
+          this.ctx.rotate(-Math.PI / 4);
+          this.ctx.translate(-this.sizes.width / 2, this.sizes.height / 2);
+
+          this.coloredSVG.style.display = "none";
+          this.outlineSVG.style.setProperty("opacity", "1", "important");
+        }
+
+        const value = this.calcAnimatedValue(
+          xLetterAnimation,
+          this.currentScrollY,
+          this.height
+        );
+
+        this.xLetterAnimation(this.xLetter.img, value);
+      } else if (
+        scrollRatio >= svgPathAnimation[2].start &&
+        scrollRatio < svgPathAnimation[2].end
+      ) {
+        if (this.animation_status != "svgPath") {
+          this.animation_status = "svgPath";
+        }
+
+        const value = this.calcAnimatedValue(
+          svgPathAnimation,
+          this.currentScrollY,
+          this.height
+        );
+
+        this.svgPathAnimation(value);
+      } else if (
+        scrollRatio >= canvasImageAnimation[2].start &&
+        scrollRatio < canvasImageAnimation[2].end
+      ) {
+        if (this.animation_status != "canvas") {
+          this.animation_status = "canvas";
+        }
+
+        const value = this.calcAnimatedValue(
+          canvasImageAnimation,
+          this.currentScrollY,
+          this.height
+        );
+
+        this.canvasImageAnimation(value);
+      }
+
+      // start contrast effect,,
       if (scrollRatio < opacityOut[2].start) {
         this.stickyElement.style.opacity = 1;
       } else if (scrollRatio > opacityOut[2].end) {
