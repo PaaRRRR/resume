@@ -313,7 +313,8 @@ body {
   stroke-dashoffset: 0;
 }
 
-.svg-wrapper g#outline path {
+.svg-wrapper g#outline path,
+.svg-path-animation path {
   fill: none;
   stroke: var(--text-color);
 }

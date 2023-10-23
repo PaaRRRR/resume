@@ -8,8 +8,10 @@ class BannerHighlight extends HTMLElement {
   init() {
     this.stickyElement = this.querySelector("[data-banner-sticky]");
     this.contrastElement = this.querySelector("[data-banner-contrast]");
-    this.canvas = this.querySelector("canvas");
+    this.canvas = this.querySelector(".canvas-animation-01");
+    this.canvas2 = this.querySelector(".canvas-animation-02");
     this.ctx = this.canvas.getContext("2d");
+    this.ctx2 = this.canvas2.getContext("2d");
     this.sizes = {
       width: window.innerWidth,
       height: window.innerHeight,
@@ -31,24 +33,25 @@ class BannerHighlight extends HTMLElement {
     this.sizes.width = window.innerWidth;
     this.sizes.height = window.innerHeight;
 
-    this.highResolution();
+    this.highResolution(this.canvas, this.ctx);
+    this.highResolution(this.canvas2, this.ctx2);
   }
 
-  highResolution() {
+  highResolution(canvas, ctx) {
     // Get the DPR and size of the canvas
     const dpr = window.devicePixelRatio;
     const rect = this.canvas.getBoundingClientRect();
 
     // Set the "actual" size of the canvas
-    this.canvas.width = rect.width * dpr;
-    this.canvas.height = rect.height * dpr;
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
 
     // Scale the context to ensure correct drawing operations
-    this.ctx.scale(dpr, dpr);
+    ctx.scale(dpr, dpr);
 
     // Set the "drawn" size of the canvas
-    this.canvas.style.width = `${rect.width}px`;
-    this.canvas.style.height = `${rect.height}px`;
+    canvas.style.width = `${rect.width}px`;
+    canvas.style.height = `${rect.height}px`;
   }
 
   getVariables() {
@@ -60,11 +63,11 @@ class BannerHighlight extends HTMLElement {
       img: "",
     };
     this.diamond = [];
-    this.paths = [...document.querySelectorAll("#outline path")];
+    this.paths = [...document.querySelectorAll(".svg-path-animation path")];
     this.animation_status = "bar";
 
-    this.outlineSVG = document.querySelector("g#outline");
-    this.coloredSVG = document.querySelector("g#colored");
+    this.svgPathIntro = document.querySelector(".svg-path-intro");
+    this.svgPathAnimationEl = document.querySelector(".svg-path-animation");
 
     this.requestAnimationTimer = null;
     this.requestAnimationCurrent;
@@ -80,8 +83,7 @@ class BannerHighlight extends HTMLElement {
   }
 
   loadHandler() {
-    const svgWrapper = document.querySelector(".svg-wrapper");
-    svgWrapper.classList.add("intro");
+    this.svgPathIntro.classList.add("intro");
 
     setTimeout(() => {
       document.body.style.overflow = "unset";
@@ -104,7 +106,7 @@ class BannerHighlight extends HTMLElement {
 
   loadDiamond() {
     let row_num = 8;
-    const originalSize = this.sizes.width;
+    const originalSize = Math.max(this.sizes.width, this.sizes.height);
     const scaledSize = originalSize * 1.4;
     const targetBoxSize = Math.floor(scaledSize / row_num);
 
@@ -140,7 +142,7 @@ class BannerHighlight extends HTMLElement {
 
   /* sticky element animation part */
 
-  canvasImageAnimation(percentage) {
+  canvasImageAnimation(ctx, percentage) {
     const canvasImages = this.canvasImages;
     let calcedIndex = Math.floor(canvasImages.length * percentage);
     if (!calcedIndex || calcedIndex < 0) {
@@ -151,91 +153,97 @@ class BannerHighlight extends HTMLElement {
 
     const currentImg = canvasImages[calcedIndex];
 
-    this.ctx.clearRect(0, 0, this.sizes.width, this.sizes.height);
-    this.ctx.drawImage(currentImg, 0, 0, this.sizes.width, this.sizes.height);
+    ctx.clearRect(0, 0, this.sizes.width, this.sizes.height);
+    ctx.drawImage(currentImg, 0, 0, this.sizes.width, this.sizes.height);
   }
 
-  renderText(percentage) {
-    // ctx.clearRect(0, 0, sizes.width, sizes.height);
+  renderText(ctx, percentage) {
+    ctx.clearRect(0, 0, this.sizes.width, this.sizes.height);
 
     const word = "TAKE OVER";
 
-    this.ctx.textAlign = "center";
-    this.ctx.textBaseline = "middle";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
 
     if (percentage <= 0.5) {
       let wordIndex = Math.ceil(word.length * (percentage / 0.5));
       const currentText = word.slice(0, wordIndex);
-      this.strokeText(currentText, "300px", "#FCEB57", true);
+      this.strokeText(ctx, currentText, "300px", "#FCEB57", true);
     } else {
       let calcedPercentage = Math.ceil(percentage * 20);
 
       if (calcedPercentage % 2 == 0) {
-        this.fillText(word, `${300 + 300 * (calcedPercentage / 20)}px`);
+        this.fillText(ctx, word, `${300 + 300 * (calcedPercentage / 20)}px`);
       } else {
-        this.ctx.clearRect(0, 0, this.sizes.width, this.sizes.height);
+        ctx.clearRect(0, 0, this.sizes.width, this.sizes.height);
       }
     }
   }
 
   fillText(
+    ctx,
     text = "TAKE OVER",
     size = "300px",
     color = "#FCEB57",
     reverse = false
   ) {
-    this.ctx.clearRect(0, 0, this.sizes.width, this.sizes.height);
-    this.ctx.font = `${size} DharmaGothicC-HeavyItalic`;
-    this.ctx.fillStyle = color;
+    ctx.clearRect(0, 0, this.sizes.width, this.sizes.height);
+    ctx.font = `${size} DharmaGothicC-HeavyItalic`;
+    ctx.fillStyle = color;
     let xPos = this.sizes.width / 2;
     let yPos = this.sizes.height / 2;
 
     if (reverse) {
-      this.ctx.translate(0, 0);
-      this.ctx.rotate(Math.PI);
+      ctx.translate(0, 0);
+      ctx.rotate(Math.PI);
 
       xPos = 0 - this.sizes.width / 2;
       yPos = 0 - this.sizes.height / 2;
     }
 
-    this.ctx.fillText(text, xPos, yPos);
+    ctx.fillText(text, xPos, yPos);
   }
 
   strokeText(
+    ctx,
     text = "TAKE OVER",
     size = "300px",
     color = "#FCEB57",
     reverse = false
   ) {
-    this.ctx.clearRect(0, 0, this.sizes.width, this.sizes.height);
-    this.ctx.font = `${size} DharmaGothicC-HeavyItalic`;
-    this.ctx.strokeStyle = color;
+    ctx.clearRect(0, 0, this.sizes.width, this.sizes.height);
+    ctx.font = `${size} DharmaGothicC-HeavyItalic`;
+    ctx.strokeStyle = color;
     let xPos = this.sizes.width / 2;
     let yPos = this.sizes.height / 2;
 
     if (reverse) {
-      this.ctx.translate(0, 0);
-      this.ctx.rotate(Math.PI);
+      ctx.translate(0, 0);
+      ctx.rotate(Math.PI);
 
       xPos = 0 - this.sizes.width / 2;
       yPos = 0 - this.sizes.height / 2;
     }
 
-    this.ctx.strokeText(text, xPos, yPos);
+    ctx.strokeText(text, xPos, yPos);
   }
 
-  renderRect(percentage) {
+  renderRect(ctx, percentage) {
     let barWidth = Math.floor(this.sizes.width * percentage);
 
     let rightBarXPos = this.sizes.width - barWidth;
 
     let barHeight = Math.floor(this.sizes.height / 2);
 
+    ctx.fillStyle = "#000000";
+
+    ctx.clearRect(0, 0, this.sizes.width, this.sizes.height);
+
     // left
-    this.ctx.fillRect(0, 0, barWidth, barHeight);
+    ctx.fillRect(0, 0, barWidth, barHeight);
 
     // right
-    this.ctx.fillRect(
+    ctx.fillRect(
       rightBarXPos,
       barHeight,
       barWidth,
@@ -256,22 +264,25 @@ class BannerHighlight extends HTMLElement {
     }
   }
 
-  renderDiamond(percentage) {
+  renderDiamond(ctx, percentage) {
+    const maxSide = Math.max(this.sizes.width, this.sizes.height);
+    ctx.clearRect(0, 0, maxSide * 1.4, maxSide * 1.4);
+
     this.diamond.forEach((cur) => {
-      this.ctx.fillStyle = cur.fill;
+      ctx.fillStyle = cur.fill;
 
       const targetWidth = cur.w * percentage;
       const difference = cur.w - targetWidth;
       const targetX = cur.x + difference / 2;
       const targetY = cur.y + difference / 2;
 
-      this.ctx.fillRect(targetX, targetY, targetWidth, targetWidth);
+      ctx.fillRect(targetX, targetY, targetWidth, targetWidth);
     });
   }
 
-  xLetterAnimation(img, percentage) {
-    this.ctx.clearRect(0, 0, this.sizes.width, this.sizes.height);
-    let imgWidth = this.sizes.width * percentage * 8;
+  xLetterAnimation(ctx, img, percentage) {
+    ctx.clearRect(0, 0, this.sizes.width, this.sizes.height);
+    let imgWidth = this.sizes.width * percentage * 10; // 539 : 50 = x : this.sizes.width
     let imgHeight = imgWidth * this.xLetter.ratio;
 
     imgWidth = Math.floor(imgWidth);
@@ -281,30 +292,30 @@ class BannerHighlight extends HTMLElement {
     const startYPoint = Math.floor(this.sizes.height / 2 - imgHeight / 2);
 
     // ctx.beginPath();
-    this.ctx.fillStyle = "#ABE9F9";
-    this.ctx.rect(0, 0, this.sizes.width, startYPoint);
-    this.ctx.rect(0, startYPoint - 1, startXPoint + 1, imgHeight + 1);
-    this.ctx.rect(
+    ctx.fillStyle = "#ABE9F9";
+    ctx.rect(0, 0, this.sizes.width, startYPoint);
+    ctx.rect(0, startYPoint - 1, startXPoint + 1, imgHeight + 1);
+    ctx.rect(
       this.sizes.width - startXPoint - 1,
       startYPoint - 1,
       startXPoint + 1,
       imgHeight + 1
     );
-    this.ctx.rect(
+    ctx.rect(
       0,
       this.sizes.height - startYPoint,
       this.sizes.width,
       this.sizes.height
     );
-    this.ctx.fill();
-    this.ctx.clearRect(
+    ctx.fill();
+    ctx.clearRect(
       startXPoint + 8,
       startYPoint + 8,
       imgWidth - 8,
       imgHeight - 8
     );
 
-    this.ctx.drawImage(img, startXPoint, startYPoint, imgWidth, imgHeight);
+    ctx.drawImage(img, startXPoint, startYPoint, imgWidth, imgHeight);
   }
 
   totalAnimation(fps) {
@@ -407,6 +418,7 @@ class BannerHighlight extends HTMLElement {
       xLetterAnimation = [0, 1, { start: 0, end: 0 }],
       svgPathAnimation = [0, 1, { start: 0, end: 0 }],
       canvasImageAnimation = [0, 1, { start: 0, end: 0 }],
+      canvasOpacityOut = [1, 0, { start: 0, end: 0 }],
       opacityOut = [1, 0, { start: 0, end: 0 }],
       contrastIn = [255, 0, { start: 0, end: 0 }];
 
@@ -432,8 +444,8 @@ class BannerHighlight extends HTMLElement {
     opacityOut[2].end = opacityOutEndAt / this.height;
 
     const stickyElementLong = contrastIn[2].start;
-    // 10, 10, 10, 10, 5, 10
-    const stickyElementStep = stickyElementLong / 55;
+    // 10, 10, 10, 10, 5, 10, 5
+    const stickyElementStep = stickyElementLong / 60;
     rectAnimation[2].start = 0;
     rectAnimation[2].end = rectAnimation[2].start + 10 * stickyElementStep;
     textAnimation[2].start = rectAnimation[2].end;
@@ -449,7 +461,9 @@ class BannerHighlight extends HTMLElement {
     canvasImageAnimation[2].start = svgPathAnimation[2].end;
     canvasImageAnimation[2].end =
       canvasImageAnimation[2].start + 10 * stickyElementStep;
-    opacityOut[2].start = canvasImageAnimation[2].end;
+    canvasOpacityOut[2].start = canvasImageAnimation[2].end;
+    canvasOpacityOut[2].end = canvasOpacityOut[2].start + 5 * stickyElementStep;
+    opacityOut[2].start = canvasOpacityOut[2].end;
 
     this.animateValue = {
       rectAnimation,
@@ -458,6 +472,7 @@ class BannerHighlight extends HTMLElement {
       xLetterAnimation,
       svgPathAnimation,
       canvasImageAnimation,
+      canvasOpacityOut,
 
       opacityOut,
       contrastIn,
@@ -501,6 +516,7 @@ class BannerHighlight extends HTMLElement {
         xLetterAnimation,
         svgPathAnimation,
         canvasImageAnimation,
+        canvasOpacityOut,
         opacityOut,
         contrastIn,
       } = this.animateValue;
@@ -512,6 +528,8 @@ class BannerHighlight extends HTMLElement {
       ) {
         if (this.animation_status != "rect") {
           this.animation_status = "rect";
+
+          this.canvas.style.background = "";
         }
 
         const value = this.calcAnimatedValue(
@@ -520,7 +538,7 @@ class BannerHighlight extends HTMLElement {
           this.height
         );
 
-        this.renderRect(value);
+        this.renderRect(this.ctx, value);
       } else if (
         scrollRatio >= textAnimation[2].start &&
         scrollRatio < textAnimation[2].end
@@ -529,6 +547,10 @@ class BannerHighlight extends HTMLElement {
           this.animation_status = "text";
 
           this.canvas.style.background = "black";
+          this.canvas.style.display = "block";
+          this.canvas2.style.display = "none";
+
+          this.ctx2.clearRect(0, 0, this.sizes.width, this.sizes.height);
         }
 
         const value = this.calcAnimatedValue(
@@ -537,7 +559,7 @@ class BannerHighlight extends HTMLElement {
           this.height
         );
 
-        this.renderText(value);
+        this.renderText(this.ctx, value);
       } else if (
         scrollRatio >= diamondAnimation[2].start &&
         scrollRatio < diamondAnimation[2].end
@@ -545,8 +567,17 @@ class BannerHighlight extends HTMLElement {
         if (this.animation_status != "diamond") {
           this.animation_status = "diamond";
 
-          this.ctx.translate(this.sizes.width / 2, -this.sizes.height / 2);
-          this.ctx.rotate(Math.PI / 4);
+          this.canvas.style.display = "block";
+          this.canvas2.style.display = "block";
+          this.svgPathIntro.style.opacity = "1";
+          this.svgPathAnimationEl.style.opacity = "0";
+          this.canvas.style.background = "black";
+
+          this.ctx2.restore();
+          this.ctx2.save();
+
+          // this.ctx2.translate(this.sizes.width / 2, -this.sizes.height / 2);
+          // this.ctx2.rotate(Math.PI / 4);
         }
 
         const value = this.calcAnimatedValue(
@@ -555,7 +586,7 @@ class BannerHighlight extends HTMLElement {
           this.height
         );
 
-        this.renderDiamond(value);
+        this.renderDiamond(this.ctx2, value);
       } else if (
         scrollRatio >= xLetterAnimation[2].start &&
         scrollRatio < xLetterAnimation[2].end
@@ -564,12 +595,15 @@ class BannerHighlight extends HTMLElement {
           this.animation_status = "xLetter";
 
           this.canvas.style.background = "";
+          this.canvas.style.display = "none";
+          this.canvas2.style.display = "block";
 
-          this.ctx.rotate(-Math.PI / 4);
-          this.ctx.translate(-this.sizes.width / 2, this.sizes.height / 2);
+          this.ctx2.restore();
 
-          this.coloredSVG.style.display = "none";
-          this.outlineSVG.style.setProperty("opacity", "1", "important");
+          this.svgPathIntro.style.opacity = "0";
+          this.svgPathAnimationEl.style.opacity = "1";
+
+          this.svgPathAnimation(0);
         }
 
         const value = this.calcAnimatedValue(
@@ -578,13 +612,15 @@ class BannerHighlight extends HTMLElement {
           this.height
         );
 
-        this.xLetterAnimation(this.xLetter.img, value);
+        this.xLetterAnimation(this.ctx2, this.xLetter.img, value);
       } else if (
         scrollRatio >= svgPathAnimation[2].start &&
         scrollRatio < svgPathAnimation[2].end
       ) {
         if (this.animation_status != "svgPath") {
           this.animation_status = "svgPath";
+
+          this.ctx2.clearRect(0, 0, this.sizes.width, this.sizes.height);
         }
 
         const value = this.calcAnimatedValue(
@@ -600,6 +636,8 @@ class BannerHighlight extends HTMLElement {
       ) {
         if (this.animation_status != "canvas") {
           this.animation_status = "canvas";
+          this.svgPathAnimation(1);
+          this.canvas2.style.opacity = 1;
         }
 
         const value = this.calcAnimatedValue(
@@ -608,7 +646,22 @@ class BannerHighlight extends HTMLElement {
           this.height
         );
 
-        this.canvasImageAnimation(value);
+        this.canvasImageAnimation(this.ctx2, value);
+      } else if (
+        scrollRatio >= canvasOpacityOut[2].start &&
+        scrollRatio < canvasOpacityOut[2].end
+      ) {
+        if (this.animation_status != "canvasOpacityOut") {
+          this.animation_status = "canvasOpacityOut";
+        }
+
+        const value = this.calcAnimatedValue(
+          canvasOpacityOut,
+          this.currentScrollY,
+          this.height
+        );
+
+        this.canvas2.style.opacity = value;
       }
 
       // start contrast effect,,
