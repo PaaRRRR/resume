@@ -94,11 +94,11 @@ class BannerHighlight extends HTMLElement {
 
   loadCanvasImage(callback = () => {}) {
     let imgElem;
-    let numLoading = 89;
+    let numLoading = 86;
     const onload = () => --numLoading === 0 && callback();
     for (let i = 0; i < numLoading; i += 1) {
       imgElem = new Image();
-      imgElem.src = `../images/takeover/canvas/TakeOver_canvas_${100 + i}.webp`;
+      imgElem.src = `../images/takeover/canvas/TakeOver_canvas_${103 + i}.webp`;
       this.canvasImages.push(imgElem);
       imgElem.onload = onload;
     }
