@@ -425,7 +425,8 @@ class BannerHighlight extends HTMLElement {
     canvasImageAnimation[2].end =
       canvasImageAnimation[2].start + 10 * stickyElementStep;
     canvasOpacityOut[2].start = canvasImageAnimation[2].end;
-    canvasOpacityOut[2].end = canvasOpacityOut[2].start + 5 * stickyElementStep;
+    canvasOpacityOut[2].end =
+      canvasOpacityOut[2].start + 2.5 * stickyElementStep;
     opacityOut[2].start = canvasOpacityOut[2].end;
 
     this.animateValue = {
@@ -649,6 +650,8 @@ class BannerHighlight extends HTMLElement {
         );
 
         this.canvas5.style.opacity = value;
+      } else {
+        this.canvas5.style.opacity = 0;
       }
 
       // start contrast effect,,
