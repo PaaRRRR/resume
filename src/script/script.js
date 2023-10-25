@@ -73,6 +73,7 @@ class BannerHighlight extends HTMLElement {
       img: "",
     };
     this.diamond = [];
+    this.diamondScaleRatio = 1.4;
     this.paths = [...document.querySelectorAll(".svg-path-animation path")];
     this.animation_status = "bar";
 
@@ -99,8 +100,11 @@ class BannerHighlight extends HTMLElement {
       document.body.style.overflow = "unset";
       document.querySelector("nav").style.display = "block";
 
-      // this.ctx3.translate(this.sizes.width / 2, -this.sizes.height / 2);
-      // this.ctx3.rotate(Math.PI / 4);
+      const originalSize = Math.max(this.sizes.width, this.sizes.height);
+      const scaledSize = originalSize * this.diamondScaleRatio;
+
+      this.ctx4.translate(scaledSize / 2, -scaledSize / 2);
+      this.ctx4.rotate(Math.PI / 4);
     }, 3000);
   }
 
@@ -119,15 +123,13 @@ class BannerHighlight extends HTMLElement {
   loadDiamond() {
     let row_num = 8;
     const originalSize = Math.max(this.sizes.width, this.sizes.height);
-    const scaledSize = originalSize * 1.4;
+    const scaledSize = originalSize * this.diamondScaleRatio;
     const targetBoxSize = Math.floor(scaledSize / row_num);
-
-    let translatedValue = (scaledSize - originalSize) / 2;
 
     for (let i = 0; i < row_num * row_num; i += 1) {
       let mok = Math.floor(i / row_num);
-      let posX = targetBoxSize * (i % row_num) - translatedValue;
-      let posY = targetBoxSize * mok - translatedValue;
+      let posX = targetBoxSize * (i % row_num);
+      let posY = targetBoxSize * mok;
       this.diamond.push(
         new Shape(posX, posY, targetBoxSize, targetBoxSize, "#ABE9F9")
       );
@@ -301,8 +303,10 @@ class BannerHighlight extends HTMLElement {
   }
 
   renderDiamond(ctx, percentage) {
-    const maxSide = Math.max(this.sizes.width, this.sizes.height);
-    ctx.clearRect(0, 0, maxSide * 1.4, maxSide * 1.4);
+    const originalSize = Math.max(this.sizes.width, this.sizes.height);
+    const scaledSize = originalSize * this.diamondScaleRatio;
+
+    ctx.clearRect(0, 0, scaledSize, scaledSize);
 
     this.diamond.forEach((cur) => {
       ctx.fillStyle = cur.fill;
