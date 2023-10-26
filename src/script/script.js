@@ -32,6 +32,9 @@ class BannerHighlight extends HTMLElement {
 
     window.addEventListener("scroll", this.scrollHandler.bind(this));
     window.addEventListener("resize", this.resizeHandler.bind(this));
+    window.addEventListener("orientationchange", () => {
+      this.orientation = screen.orientation.type;
+    });
 
     this.resizeHandler();
   }
@@ -72,16 +75,16 @@ class BannerHighlight extends HTMLElement {
       ratio: 0.645,
       img: "",
     };
+    this.canvasFontSizeRatio = 300 / 1680;
+    this.canvasFontPxHRatio = 240 / 300;
     this.diamond = [];
     this.diamondScaleRatio = 1.4;
+    this.orientation = screen.orientation.type;
     this.paths = [...document.querySelectorAll(".svg-path-animation path")];
     this.animation_status = "bar";
 
     this.svgPathIntro = document.querySelector(".svg-path-intro");
     this.svgPathAnimationEl = document.querySelector(".svg-path-animation");
-
-    this.requestAnimationTimer = null;
-    this.requestAnimationCurrent;
   }
 
   loadAsset() {
@@ -100,12 +103,24 @@ class BannerHighlight extends HTMLElement {
       document.body.style.overflow = "unset";
       document.querySelector("nav").style.display = "block";
 
-      const originalSize = Math.max(this.sizes.width, this.sizes.height);
-      const scaledSize = originalSize * this.diamondScaleRatio;
-
-      this.ctx4.translate(scaledSize / 2, -scaledSize / 2);
-      this.ctx4.rotate(Math.PI / 4);
+      this.diamondResizeHandler();
     }, 3000);
+  }
+
+  diamondResizeHandler() {
+    this.ctx4.save();
+    this.ctx4.restore();
+
+    const originalSize = Math.max(this.sizes.width, this.sizes.height);
+    const scaledSize = originalSize * this.diamondScaleRatio;
+
+    if (this.orientation.includes("portrait")) {
+      this.ctx4.translate(this.sizes.width / 2, -this.sizes.height / 2);
+    } else {
+      this.ctx4.translate(scaledSize / 2, -scaledSize / 2);
+    }
+
+    this.ctx4.rotate(Math.PI / 4);
   }
 
   loadCanvasImage(callback = () => {}) {
@@ -171,27 +186,6 @@ class BannerHighlight extends HTMLElement {
     ctx.drawImage(currentImg, 0, 0, this.sizes.width, this.sizes.height);
   }
 
-  renderText(ctx, percentage) {
-    const word = "TAKE OVER";
-
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-
-    if (percentage <= 0.5) {
-      let wordIndex = Math.ceil(word.length * (percentage / 0.5));
-      const currentText = word.slice(0, wordIndex);
-      this.strokeText(ctx, currentText, "300px", "#FCEB57", true);
-    } else {
-      let calcedPercentage = Math.ceil(percentage * 20);
-
-      if (calcedPercentage % 2 == 0) {
-        this.fillText(ctx, word, `${300 + 300 * (calcedPercentage / 20)}px`);
-      } else {
-        ctx.clearRect(0, 0, this.sizes.width, this.sizes.height);
-      }
-    }
-  }
-
   renderStrokeText(ctx, percentage) {
     const word = "TAKE OVER";
 
@@ -200,7 +194,10 @@ class BannerHighlight extends HTMLElement {
 
     let wordIndex = Math.ceil(word.length * percentage);
     const currentText = word.slice(0, wordIndex);
-    this.strokeText(ctx, currentText, "300px", "#FCEB57", true);
+    let fontSize = this.sizes.width * this.canvasFontSizeRatio;
+    fontSize = this.orientation.includes("portrait") ? fontSize * 3 : fontSize;
+
+    this.strokeText(ctx, currentText, fontSize, "#FCEB57", true);
   }
 
   renderFillText(ctx, percentage) {
@@ -210,9 +207,15 @@ class BannerHighlight extends HTMLElement {
     ctx.textBaseline = "middle";
 
     let calcedPercentage = Math.ceil(percentage * 10);
+    let fontSize = this.sizes.width * this.canvasFontSizeRatio;
+    fontSize = this.orientation.includes("portrait") ? fontSize * 3 : fontSize;
 
     if (calcedPercentage % 2 == 0) {
-      this.fillText(ctx, word, `${300 + 300 * (calcedPercentage / 10)}px`);
+      this.fillText(
+        ctx,
+        word,
+        Math.floor(fontSize + fontSize * (calcedPercentage / 15))
+      );
     } else {
       ctx.clearRect(0, 0, this.sizes.width, this.sizes.height);
     }
@@ -221,49 +224,153 @@ class BannerHighlight extends HTMLElement {
   fillText(
     ctx,
     text = "TAKE OVER",
-    size = "300px",
+    size = 300,
     color = "#FCEB57",
     reverse = false
   ) {
     ctx.clearRect(0, 0, this.sizes.width, this.sizes.height);
-    ctx.font = `${size} DharmaGothicC-HeavyItalic`;
+    ctx.font = `${size}px DharmaGothicC-HeavyItalic`;
     ctx.fillStyle = color;
-    let xPos = this.sizes.width / 2;
-    let yPos = this.sizes.height / 2;
 
-    if (reverse) {
-      ctx.translate(0, 0);
-      ctx.rotate(Math.PI);
+    if (this.orientation.includes("portrait")) {
+      let textArray = text.split(" ");
+      if (textArray.length > 1) {
+        let xPos1 = this.sizes.width / 2;
+        let yPos1 =
+          this.sizes.height / 2 - (size * this.canvasFontPxHRatio) / 2;
+        let xPos2 = this.sizes.width / 2;
+        let yPos2 =
+          this.sizes.height / 2 + (size * this.canvasFontPxHRatio) / 2;
 
-      xPos = 0 - this.sizes.width / 2;
-      yPos = 0 - this.sizes.height / 2;
+        if (reverse) {
+          ctx.translate(0, 0);
+          ctx.rotate(Math.PI);
+
+          xPos1 = 0 - this.sizes.width / 2;
+          yPos1 =
+            0 - this.sizes.height / 2 - (size * this.canvasFontPxHRatio) / 2;
+          xPos2 = 0 - this.sizes.width / 2;
+          yPos2 =
+            0 - this.sizes.height / 2 + (size * this.canvasFontPxHRatio) / 2;
+        }
+
+        xPos1 = Math.floor(xPos1);
+        yPos1 = Math.floor(yPos1);
+        xPos2 = Math.floor(xPos2);
+        yPos2 = Math.floor(yPos2);
+
+        ctx.fillText(textArray[0], xPos1, yPos1);
+        ctx.fillText(textArray[1], xPos2, yPos2);
+      } else {
+        let xPos = this.sizes.width / 2;
+        let yPos = this.sizes.height / 2;
+
+        if (reverse) {
+          ctx.translate(0, 0);
+          ctx.rotate(Math.PI);
+
+          xPos = 0 - this.sizes.width / 2;
+          yPos = 0 - this.sizes.height / 2;
+        }
+
+        xPos = Math.floor(xPos);
+        yPos = Math.floor(yPos);
+
+        ctx.fillText(text, xPos, yPos);
+      }
+    } else {
+      let xPos = this.sizes.width / 2;
+      let yPos = this.sizes.height / 2;
+
+      if (reverse) {
+        ctx.translate(0, 0);
+        ctx.rotate(Math.PI);
+
+        xPos = 0 - this.sizes.width / 2;
+        yPos = 0 - this.sizes.height / 2;
+      }
+
+      xPos = Math.floor(xPos);
+      yPos = Math.floor(yPos);
+
+      ctx.fillText(text, xPos, yPos);
     }
-
-    ctx.fillText(text, xPos, yPos);
   }
 
   strokeText(
     ctx,
     text = "TAKE OVER",
-    size = "300px",
+    size = 300,
     color = "#FCEB57",
     reverse = false
   ) {
     ctx.clearRect(0, 0, this.sizes.width, this.sizes.height);
-    ctx.font = `${size} DharmaGothicC-HeavyItalic`;
+    ctx.font = `${size}px DharmaGothicC-HeavyItalic`;
     ctx.strokeStyle = color;
-    let xPos = this.sizes.width / 2;
-    let yPos = this.sizes.height / 2;
 
-    if (reverse) {
-      ctx.translate(0, 0);
-      ctx.rotate(Math.PI);
+    if (this.orientation.includes("portrait")) {
+      let textArray = text.split(" ");
+      if (textArray.length > 1) {
+        let xPos1 = this.sizes.width / 2;
+        let yPos1 =
+          this.sizes.height / 2 - (size * this.canvasFontPxHRatio) / 2;
+        let xPos2 = this.sizes.width / 2;
+        let yPos2 =
+          this.sizes.height / 2 + (size * this.canvasFontPxHRatio) / 2;
 
-      xPos = 0 - this.sizes.width / 2;
-      yPos = 0 - this.sizes.height / 2;
+        if (reverse) {
+          ctx.translate(0, 0);
+          ctx.rotate(Math.PI);
+
+          xPos1 = 0 - this.sizes.width / 2;
+          yPos1 =
+            0 - this.sizes.height / 2 - (size * this.canvasFontPxHRatio) / 2;
+          xPos2 = 0 - this.sizes.width / 2;
+          yPos2 =
+            0 - this.sizes.height / 2 + (size * this.canvasFontPxHRatio) / 2;
+        }
+
+        xPos1 = Math.floor(xPos1);
+        yPos1 = Math.floor(yPos1);
+        xPos2 = Math.floor(xPos2);
+        yPos2 = Math.floor(yPos2);
+
+        ctx.strokeText(textArray[0], xPos1, yPos1);
+        ctx.strokeText(textArray[1], xPos2, yPos2);
+      } else {
+        let xPos = this.sizes.width / 2;
+        let yPos = this.sizes.height / 2;
+
+        if (reverse) {
+          ctx.translate(0, 0);
+          ctx.rotate(Math.PI);
+
+          xPos = 0 - this.sizes.width / 2;
+          yPos = 0 - this.sizes.height / 2;
+        }
+
+        xPos = Math.floor(xPos);
+        yPos = Math.floor(yPos);
+
+        ctx.strokeText(text, xPos, yPos);
+      }
+    } else {
+      let xPos = this.sizes.width / 2;
+      let yPos = this.sizes.height / 2;
+
+      if (reverse) {
+        ctx.translate(0, 0);
+        ctx.rotate(Math.PI);
+
+        xPos = 0 - this.sizes.width / 2;
+        yPos = 0 - this.sizes.height / 2;
+      }
+
+      xPos = Math.floor(xPos);
+      yPos = Math.floor(yPos);
+
+      ctx.strokeText(text, xPos, yPos);
     }
-
-    ctx.strokeText(text, xPos, yPos);
   }
 
   renderRect(ctx, percentage) {
@@ -324,6 +431,11 @@ class BannerHighlight extends HTMLElement {
     ctx.clearRect(0, 0, this.sizes.width, this.sizes.height);
     let imgWidth = this.sizes.width * percentage * 10; // 539 : 50 = x : this.sizes.width
     let imgHeight = imgWidth * this.xLetter.ratio;
+
+    if (this.orientation.includes("portrait")) {
+      imgHeight = this.sizes.height * percentage * 7; // 348 : 50 = y : this.sizes.height
+      imgWidth = imgHeight / this.xLetter.ratio;
+    }
 
     imgWidth = Math.floor(imgWidth);
     imgHeight = Math.floor(imgHeight);
