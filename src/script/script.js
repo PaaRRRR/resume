@@ -1,3 +1,179 @@
+import letter_X_colored from "../images/takeover/letter_X_colored.svg";
+import canvasImage_3 from "../images/takeover/canvas/TakeOver_canvas_103.webp";
+import canvasImage_4 from "../images/takeover/canvas/TakeOver_canvas_104.webp";
+import canvasImage_5 from "../images/takeover/canvas/TakeOver_canvas_105.webp";
+import canvasImage_6 from "../images/takeover/canvas/TakeOver_canvas_106.webp";
+import canvasImage_7 from "../images/takeover/canvas/TakeOver_canvas_107.webp";
+import canvasImage_8 from "../images/takeover/canvas/TakeOver_canvas_108.webp";
+import canvasImage_9 from "../images/takeover/canvas/TakeOver_canvas_109.webp";
+import canvasImage_10 from "../images/takeover/canvas/TakeOver_canvas_110.webp";
+import canvasImage_11 from "../images/takeover/canvas/TakeOver_canvas_111.webp";
+import canvasImage_12 from "../images/takeover/canvas/TakeOver_canvas_112.webp";
+import canvasImage_13 from "../images/takeover/canvas/TakeOver_canvas_113.webp";
+import canvasImage_14 from "../images/takeover/canvas/TakeOver_canvas_114.webp";
+import canvasImage_15 from "../images/takeover/canvas/TakeOver_canvas_115.webp";
+import canvasImage_16 from "../images/takeover/canvas/TakeOver_canvas_116.webp";
+import canvasImage_17 from "../images/takeover/canvas/TakeOver_canvas_117.webp";
+import canvasImage_18 from "../images/takeover/canvas/TakeOver_canvas_118.webp";
+import canvasImage_19 from "../images/takeover/canvas/TakeOver_canvas_119.webp";
+import canvasImage_20 from "../images/takeover/canvas/TakeOver_canvas_120.webp";
+import canvasImage_21 from "../images/takeover/canvas/TakeOver_canvas_121.webp";
+import canvasImage_22 from "../images/takeover/canvas/TakeOver_canvas_122.webp";
+import canvasImage_23 from "../images/takeover/canvas/TakeOver_canvas_123.webp";
+import canvasImage_24 from "../images/takeover/canvas/TakeOver_canvas_124.webp";
+import canvasImage_25 from "../images/takeover/canvas/TakeOver_canvas_125.webp";
+import canvasImage_26 from "../images/takeover/canvas/TakeOver_canvas_126.webp";
+import canvasImage_27 from "../images/takeover/canvas/TakeOver_canvas_127.webp";
+import canvasImage_28 from "../images/takeover/canvas/TakeOver_canvas_128.webp";
+import canvasImage_29 from "../images/takeover/canvas/TakeOver_canvas_129.webp";
+import canvasImage_30 from "../images/takeover/canvas/TakeOver_canvas_130.webp";
+import canvasImage_31 from "../images/takeover/canvas/TakeOver_canvas_131.webp";
+import canvasImage_32 from "../images/takeover/canvas/TakeOver_canvas_132.webp";
+import canvasImage_33 from "../images/takeover/canvas/TakeOver_canvas_133.webp";
+import canvasImage_34 from "../images/takeover/canvas/TakeOver_canvas_134.webp";
+import canvasImage_35 from "../images/takeover/canvas/TakeOver_canvas_135.webp";
+import canvasImage_36 from "../images/takeover/canvas/TakeOver_canvas_136.webp";
+import canvasImage_37 from "../images/takeover/canvas/TakeOver_canvas_137.webp";
+import canvasImage_38 from "../images/takeover/canvas/TakeOver_canvas_138.webp";
+import canvasImage_39 from "../images/takeover/canvas/TakeOver_canvas_139.webp";
+import canvasImage_40 from "../images/takeover/canvas/TakeOver_canvas_140.webp";
+import canvasImage_41 from "../images/takeover/canvas/TakeOver_canvas_141.webp";
+import canvasImage_42 from "../images/takeover/canvas/TakeOver_canvas_142.webp";
+import canvasImage_43 from "../images/takeover/canvas/TakeOver_canvas_143.webp";
+import canvasImage_44 from "../images/takeover/canvas/TakeOver_canvas_144.webp";
+import canvasImage_45 from "../images/takeover/canvas/TakeOver_canvas_145.webp";
+import canvasImage_46 from "../images/takeover/canvas/TakeOver_canvas_146.webp";
+import canvasImage_47 from "../images/takeover/canvas/TakeOver_canvas_147.webp";
+import canvasImage_48 from "../images/takeover/canvas/TakeOver_canvas_148.webp";
+import canvasImage_49 from "../images/takeover/canvas/TakeOver_canvas_149.webp";
+import canvasImage_50 from "../images/takeover/canvas/TakeOver_canvas_150.webp";
+import canvasImage_51 from "../images/takeover/canvas/TakeOver_canvas_151.webp";
+import canvasImage_52 from "../images/takeover/canvas/TakeOver_canvas_152.webp";
+import canvasImage_53 from "../images/takeover/canvas/TakeOver_canvas_153.webp";
+import canvasImage_54 from "../images/takeover/canvas/TakeOver_canvas_154.webp";
+import canvasImage_55 from "../images/takeover/canvas/TakeOver_canvas_155.webp";
+import canvasImage_56 from "../images/takeover/canvas/TakeOver_canvas_156.webp";
+import canvasImage_57 from "../images/takeover/canvas/TakeOver_canvas_157.webp";
+import canvasImage_58 from "../images/takeover/canvas/TakeOver_canvas_158.webp";
+import canvasImage_59 from "../images/takeover/canvas/TakeOver_canvas_159.webp";
+import canvasImage_60 from "../images/takeover/canvas/TakeOver_canvas_160.webp";
+import canvasImage_61 from "../images/takeover/canvas/TakeOver_canvas_161.webp";
+import canvasImage_62 from "../images/takeover/canvas/TakeOver_canvas_162.webp";
+import canvasImage_63 from "../images/takeover/canvas/TakeOver_canvas_163.webp";
+import canvasImage_64 from "../images/takeover/canvas/TakeOver_canvas_164.webp";
+import canvasImage_65 from "../images/takeover/canvas/TakeOver_canvas_165.webp";
+import canvasImage_66 from "../images/takeover/canvas/TakeOver_canvas_166.webp";
+import canvasImage_67 from "../images/takeover/canvas/TakeOver_canvas_167.webp";
+import canvasImage_68 from "../images/takeover/canvas/TakeOver_canvas_168.webp";
+import canvasImage_69 from "../images/takeover/canvas/TakeOver_canvas_169.webp";
+import canvasImage_70 from "../images/takeover/canvas/TakeOver_canvas_170.webp";
+import canvasImage_71 from "../images/takeover/canvas/TakeOver_canvas_171.webp";
+import canvasImage_72 from "../images/takeover/canvas/TakeOver_canvas_172.webp";
+import canvasImage_73 from "../images/takeover/canvas/TakeOver_canvas_173.webp";
+import canvasImage_74 from "../images/takeover/canvas/TakeOver_canvas_174.webp";
+import canvasImage_75 from "../images/takeover/canvas/TakeOver_canvas_175.webp";
+import canvasImage_76 from "../images/takeover/canvas/TakeOver_canvas_176.webp";
+import canvasImage_77 from "../images/takeover/canvas/TakeOver_canvas_177.webp";
+import canvasImage_78 from "../images/takeover/canvas/TakeOver_canvas_178.webp";
+import canvasImage_79 from "../images/takeover/canvas/TakeOver_canvas_179.webp";
+import canvasImage_80 from "../images/takeover/canvas/TakeOver_canvas_180.webp";
+import canvasImage_81 from "../images/takeover/canvas/TakeOver_canvas_181.webp";
+import canvasImage_82 from "../images/takeover/canvas/TakeOver_canvas_182.webp";
+import canvasImage_83 from "../images/takeover/canvas/TakeOver_canvas_183.webp";
+import canvasImage_84 from "../images/takeover/canvas/TakeOver_canvas_184.webp";
+import canvasImage_85 from "../images/takeover/canvas/TakeOver_canvas_185.webp";
+import canvasImage_86 from "../images/takeover/canvas/TakeOver_canvas_186.webp";
+import canvasImage_87 from "../images/takeover/canvas/TakeOver_canvas_187.webp";
+import canvasImage_88 from "../images/takeover/canvas/TakeOver_canvas_188.webp";
+
+const importedImgs = [
+  canvasImage_3,
+  canvasImage_4,
+  canvasImage_5,
+  canvasImage_6,
+  canvasImage_7,
+  canvasImage_8,
+  canvasImage_9,
+  canvasImage_10,
+  canvasImage_11,
+  canvasImage_12,
+  canvasImage_13,
+  canvasImage_14,
+  canvasImage_15,
+  canvasImage_16,
+  canvasImage_17,
+  canvasImage_18,
+  canvasImage_19,
+  canvasImage_20,
+  canvasImage_21,
+  canvasImage_22,
+  canvasImage_23,
+  canvasImage_24,
+  canvasImage_25,
+  canvasImage_26,
+  canvasImage_27,
+  canvasImage_28,
+  canvasImage_29,
+  canvasImage_30,
+  canvasImage_31,
+  canvasImage_32,
+  canvasImage_33,
+  canvasImage_34,
+  canvasImage_35,
+  canvasImage_36,
+  canvasImage_37,
+  canvasImage_38,
+  canvasImage_39,
+  canvasImage_40,
+  canvasImage_41,
+  canvasImage_42,
+  canvasImage_43,
+  canvasImage_44,
+  canvasImage_45,
+  canvasImage_46,
+  canvasImage_47,
+  canvasImage_48,
+  canvasImage_49,
+  canvasImage_50,
+  canvasImage_51,
+  canvasImage_52,
+  canvasImage_53,
+  canvasImage_54,
+  canvasImage_55,
+  canvasImage_56,
+  canvasImage_57,
+  canvasImage_58,
+  canvasImage_59,
+  canvasImage_60,
+  canvasImage_61,
+  canvasImage_62,
+  canvasImage_63,
+  canvasImage_64,
+  canvasImage_65,
+  canvasImage_66,
+  canvasImage_67,
+  canvasImage_68,
+  canvasImage_69,
+  canvasImage_70,
+  canvasImage_71,
+  canvasImage_72,
+  canvasImage_73,
+  canvasImage_74,
+  canvasImage_75,
+  canvasImage_76,
+  canvasImage_77,
+  canvasImage_78,
+  canvasImage_79,
+  canvasImage_80,
+  canvasImage_81,
+  canvasImage_82,
+  canvasImage_83,
+  canvasImage_84,
+  canvasImage_85,
+  canvasImage_86,
+  canvasImage_87,
+  canvasImage_88,
+];
 class BannerHighlight extends HTMLElement {
   constructor() {
     super();
@@ -132,7 +308,7 @@ class BannerHighlight extends HTMLElement {
     const onload = () => --numLoading === 0 && callback();
     for (let i = 0; i < numLoading; i += 1) {
       imgElem = new Image();
-      imgElem.src = `../images/takeover/canvas/TakeOver_canvas_${103 + i}.webp`;
+      imgElem.src = importedImgs[i];
       this.canvasImages.push(imgElem);
       imgElem.onload = onload;
     }
@@ -155,10 +331,11 @@ class BannerHighlight extends HTMLElement {
   }
 
   loadFont(callback = () => {}) {
-    const myFont = new FontFace(
-      "DharmaGothicC-HeavyItalic",
-      "url('../fonts/DharmaGothicC-HeavyItalic.ttf')"
-    );
+    const fontUrl = new URL(
+      `../fonts/DharmaGothicC-HeavyItalic.ttf`,
+      import.meta.url
+    ).href;
+    const myFont = new FontFace("DharmaGothicC-HeavyItalic", `url(${fontUrl})`);
 
     myFont.load().then((font) => {
       document.fonts.add(font);
@@ -168,7 +345,7 @@ class BannerHighlight extends HTMLElement {
 
   loadXLetter(callback = () => {}) {
     this.xLetter.img = new Image();
-    this.xLetter.img.src = `../images/takeover/letter_X_colored.svg`;
+    this.xLetter.img.src = letter_X_colored;
     this.xLetter.img.onload = callback;
   }
 
