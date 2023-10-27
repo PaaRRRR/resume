@@ -20,9 +20,11 @@ class BannerHighlight extends HTMLElement {
     this.ctx5 = this.canvas5.getContext("2d");
 
     this.sizes = {
-      width: window.innerWidth,
-      height: window.innerHeight,
+      width: 0,
+      height: 0,
     };
+
+    this.resizeHandler();
 
     this.getVariables();
 
@@ -31,17 +33,18 @@ class BannerHighlight extends HTMLElement {
     this.loadAsset();
 
     window.addEventListener("scroll", this.scrollHandler.bind(this));
-    window.addEventListener("resize", this.resizeHandler.bind(this));
+    if (this.sizes.width > 750) {
+      window.addEventListener("resize", this.resizeHandler.bind(this));
+    }
     window.addEventListener("orientationchange", () => {
       this.orientation = screen.orientation.type;
     });
-
-    this.resizeHandler();
   }
 
   resizeHandler() {
     this.sizes.width = window.innerWidth;
-    this.sizes.height = window.innerHeight;
+    this.sizes.height =
+      window.innerWidth > 750 ? window.innerHeight : window.outerHeight;
 
     this.highResolution(this.canvas, this.ctx);
     this.highResolution(this.canvas2, this.ctx2);
