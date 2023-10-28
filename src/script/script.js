@@ -218,9 +218,9 @@ class BannerHighlight extends HTMLElement {
   }
 
   resizeHandler() {
-    this.sizes.width = window.innerWidth;
+    this.sizes.width = document.body.clientWidth;
     this.sizes.height =
-      window.innerWidth > 750 ? window.innerHeight : window.outerHeight;
+      this.sizes.width > 750 ? window.innerHeight : window.outerHeight;
 
     this.highResolution(this.canvas, this.ctx);
     this.highResolution(this.canvas2, this.ctx2);
