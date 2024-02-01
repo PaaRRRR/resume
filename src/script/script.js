@@ -184,6 +184,8 @@ class BannerHighlight extends HTMLElement {
   init() {
     this.stickyElement = this.querySelector("[data-banner-sticky]");
     this.contrastElement = this.querySelector("[data-banner-contrast]");
+    this.is_nav_shown = false;
+    this.navElement = document.querySelector("nav");
     this.canvas = this.querySelector(".canvas-animation-01");
     this.canvas2 = this.querySelector(".canvas-animation-02");
     this.canvas3 = this.querySelector(".canvas-animation-03");
@@ -280,7 +282,7 @@ class BannerHighlight extends HTMLElement {
 
     setTimeout(() => {
       document.body.style.overflow = "unset";
-      document.querySelector("nav").style.display = "block";
+      // document.querySelector("nav").style.display = "block";
 
       this.diamondResizeHandler();
     }, 3000);
@@ -758,6 +760,7 @@ class BannerHighlight extends HTMLElement {
   }
 
   scrollHandler(e) {
+    // animation handler
     if (
       scrollY > this.startingYOffset &&
       scrollY < this.startingYOffset + this.height
@@ -1021,6 +1024,27 @@ class BannerHighlight extends HTMLElement {
         "--background-color-value",
         `255, 255, 255`
       );
+    }
+
+    // show / hide the nav
+    let { top } = this.contrastElement.getBoundingClientRect();
+    let halfHeight = innerHeight / 2;
+    halfHeight = Math.max(500, halfHeight);
+
+    if (scrollY > top + scrollY - halfHeight) {
+      if (this.is_nav_shown) {
+        return;
+      }
+
+      this.is_nav_shown = true;
+      this.navElement.style.display = "block";
+    } else {
+      if (!this.is_nav_shown) {
+        return;
+      }
+
+      this.is_nav_shown = false;
+      this.navElement.style.display = "none";
     }
   }
 }

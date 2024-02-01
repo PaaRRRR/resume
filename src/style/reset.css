@@ -106,6 +106,7 @@ body {
   height: auto !important;
   max-width: 1920px;
   margin: auto;
+  word-break: keep-all;
 }
 p {
   line-height: 1.6;
