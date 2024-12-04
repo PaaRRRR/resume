@@ -234,18 +234,18 @@ class BannerHighlight extends HTMLElement {
   highResolution(canvas, ctx) {
     // Get the DPR and size of the canvas
     const dpr = window.devicePixelRatio;
-    const rect = this.canvas.getBoundingClientRect();
+    const { width, height } = this.sizes;
 
     // Set the "actual" size of the canvas
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
 
     // Scale the context to ensure correct drawing operations
     ctx.scale(dpr, dpr);
 
     // Set the "drawn" size of the canvas
-    canvas.style.width = `${rect.width}px`;
-    canvas.style.height = `${rect.height}px`;
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
   }
 
   getVariables() {
