@@ -1,9 +1,10 @@
 version: "3.8"
 services:
-  web:
+  app:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
-    command: ["npm", "start"]
+      - "80:80"
+    environment:
+      NODE_ENV: production

@@ -1,18 +1,25 @@
-# 베이스 이미지 선택
-FROM node:18-alpine
+# Stage 1: Build the Vite application
+FROM node:18-alpine AS builder
 
-# 작업 디렉토리 설정
+# Set working directory
 WORKDIR /app
 
-# 패키지 설치
+# Copy package.json and install dependencies
 COPY package*.json ./
 RUN npm install
 
-# 소스 코드 복사
+# Copy the rest of the application and build it
 COPY . .
-
-# Next.js 빌드
 RUN npm run build
 
-# 앱 실행
-CMD ["npm", "start"]
+# Stage 2: Serve the built application
+FROM nginx:stable-alpine
+
+# Copy built files from builder stage to Nginx
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Expose port 80 for HTTP traffic
+EXPOSE 80
+
+# Start Nginx server
+CMD ["nginx", "-g", "daemon off;"]
